@@ -1,0 +1,10 @@
+{
+    "name" : "ssa/secure",
+    "description" : "Ssa secure module for ssa framework.",
+    "require": {
+        "ssa/core": "dev-secure"
+    },
+    "autoload" : {
+        "psr-4" : {"ssa\\secure" : ["src/"]}
+    }
+}
