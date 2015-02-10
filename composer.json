@@ -5,6 +5,6 @@
         "ssa/core": "dev-secure"
     },
     "autoload" : {
-        "psr-4" : {"ssa\\secure" : ["src/"]}
+        "psr-4" : {"ssa\\secure\\" : ["src/", "test/ssa/"]}
     }
 }

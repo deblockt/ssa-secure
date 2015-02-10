@@ -1,5 +1,5 @@
 <?php
-namespace ssa\secure\service;
+namespace ssa\secure\services;
 
 use ssa\secure\SecureConfiguration;
 use ssa\secure\TokenProvider;
@@ -8,14 +8,15 @@ use ssa\secure\TokenProvider;
  * Service use for authenticate user
  *
  * @author thomas
- */
+ */	
 class AuthenticateService {
 	
 	/**
 	 * service use to login someone
 	 */
 	public function login($login, $password) {
-		$securityProvider = SecureConfiguration::getInstance()->getSecurityProvider();
+		$secureConfig = SecureConfiguration::getInstance();
+		$securityProvider = $secureConfig->getSecurityProvider();
 		// security provider is mandatory
 		if ($securityProvider == null) {
 			throw new BadConfigurationException('security provider is mandatory');
@@ -35,7 +36,7 @@ class AuthenticateService {
 		$token = $provider->generateToken($authenticateResult);
 		
 		$return = array('logged' => true);
-		if ($secureInstance->getSecureMode() === SecureConfiguration::MODE_SESSION) {
+		if ($secureConfig->getSecureMode() === SecureConfiguration::MODE_SESSION) {
 			$_SESSION[SecureConfiguration::$tokenName] = $token;
 		} else {
 			$return[SecureConfiguration::$tokenName] = $token;

@@ -18,7 +18,7 @@ use Doctrine\Common\Annotations\Annotation;
  * 
  * @author thomas
  */
-class Secure extends RunnerHandler {
+class Secure implements RunnerHandler {
 	
     /**
      * set state magic method for cache method
@@ -49,12 +49,12 @@ class Secure extends RunnerHandler {
 			}
 			
 			// if session token not exists user not logon
-			if (!isset($_SESSION[$this->tokenName])) {
+			if (!isset($_SESSION[SecureConfiguration::$tokenName])) {
 				throw new DisconnectedException();
 			}
 			
 		} else {
-			if (!isset($inputParameters[$this->tokenName])) {
+			if (!isset($inputParameters[SecureConfiguration::$tokenName])) {
 				throw new DisconnectedException();
 			}
 		}

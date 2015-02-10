@@ -1,5 +1,5 @@
 <?php
-namespace ssa\secure\service;
+namespace ssa\secure\services;
 
 use ssa\secure\SecureConfiguration;
 

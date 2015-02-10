@@ -35,12 +35,12 @@ class SecureConfiguration  {
 	/**
 	 * session secure mode 
 	 */
-	public const MODE_SESSION = 1;
+	const MODE_SESSION = 1;
 	
 	/**
 	 * session restfull
 	 */
-	public const MODE_RESTFULL = 2;
+	const MODE_RESTFULL = 2;
 	
 	/**
 	 * token used for parameter user token
@@ -80,7 +80,7 @@ class SecureConfiguration  {
 	 * Set the security provider, used for authenticate user
 	 * @param ISercurityProvider $securityProvider the new securityProvider
 	 */
-	public function setSecurityProvider(ISercurityProvider $securityProvider) {
+	public function setSecurityProvider(ISecurityProvider $securityProvider) {
 		$this->securityProvider = $securityProvider;
 	}
 	
