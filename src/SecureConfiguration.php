@@ -43,7 +43,7 @@ class SecureConfiguration  {
 	const MODE_RESTFULL = 2;
 	
 	/**
-	 * token used for parameter user token
+	 * token used for parameter user token. Warning on update this var, update to on ssaSecure.js
 	 */
 	public static $tokenName = 'securityToken';
 	
@@ -56,6 +56,7 @@ class SecureConfiguration  {
         if (self::$instance == null) {
 			// create configuration singleton
             self::$instance = new SecureConfiguration();
+			self::$instance->secureMode = SecureConfiguration::MODE_RESTFULL;
         }
         return self::$instance;
     }

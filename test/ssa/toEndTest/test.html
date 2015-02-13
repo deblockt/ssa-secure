@@ -9,19 +9,21 @@ and open the template in the editor.
         <title> Page de test de ssa</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script type="text/javascript" src="../../../vendor/ssa/core/javascript/ssa.js" ></script>
-        <script type="text/javascript" src="javascript.php?service=helloWorldService"></script>
+        <script type="text/javascript" src="../../../vendor/ssa/core/javascript/ssa.js" ></script>	
+        <script type="text/javascript" src="javascript.php?service=helloWorldService"></script>	
+		
         <script type="text/javascript" src="javascript.php?service=authenticateService"></script>
 		
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script type="text/javascript">
 		
-			ssa.addStartCallListener(function(host) {
-				console.log('start', host);
+			ssa.addStartCallListener(function() {
+				this.haveHandler = 'yes';
+				console.log('start', this);
 			});
 			
-			ssa.addEndCallListener(function(host) {
-				console.log('end', host);
+			ssa.addEndCallListener(function() {
+				console.log('end', this);
 			});
 			
             helloWorldService.helloYou('deblockt').done(function(data) {
@@ -36,6 +38,19 @@ and open the template in the editor.
                 });
             });
 
+			authenticateService.addDisconnectListener(function(){
+				console.log(this);
+				alert('Vous avez été deconnecté');
+			});
+			
+			authenticateService.addConnectedListener(function(){
+				alert('Vous avez été correctement connecté');
+			});
+			
+			authenticateService.addBadUserOrPasswordListener(function(){
+				alert('Erreur de login our mot de passe');
+			});
+			
         </script>
     </head>
     <body>

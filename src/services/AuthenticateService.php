@@ -4,9 +4,12 @@ namespace ssa\secure\services;
 use ssa\secure\SecureConfiguration;
 use ssa\secure\TokenProvider;
 
+use ssa\converter\annotations\AddJavascript;
+
 /**
  * Service use for authenticate user
- *
+ * 
+ * @AddJavascript("../../javascript/ssaSecureModule.js")
  * @author thomas
  */	
 class AuthenticateService {

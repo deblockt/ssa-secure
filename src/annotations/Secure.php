@@ -7,6 +7,7 @@ use ssa\ServiceMetadata;
 
 use ssa\secure\DisconnectedException;
 use ssa\secure\SecureConfiguration;
+use ssa\secure\TokenProvider;
 
 use Doctrine\Common\Annotations\Annotation;
 
@@ -39,9 +40,9 @@ class Secure implements RunnerHandler {
 	 *
 	 * @throw Exception if action must no be call
 	 */
-	public function before($method,array $inputParameters,ServiceMetadata $metaData) {
+	public function before($method,array &$inputParameters,ServiceMetadata $metaData) {
 		$secureInstance = SecureConfiguration::getInstance();
-		
+		$securityToken = null;
 		if ($secureInstance->getSecureMode() === SecureConfiguration::MODE_SESSION) {
 			// start the session
 			if ($this->is_session_started() === FALSE) {
@@ -53,11 +54,22 @@ class Secure implements RunnerHandler {
 				throw new DisconnectedException();
 			}
 			
+			$securityToken = $_SESSION[SecureConfiguration::$tokenName];
 		} else {
 			if (!isset($inputParameters[SecureConfiguration::$tokenName])) {
 				throw new DisconnectedException();
 			}
+			
+			$securityToken = $inputParameters[SecureConfiguration::$tokenName];
 		}
+		
+		$provider = new TokenProvider();
+		$id = $provider->checkToken($securityToken);
+		if ($id === false) {
+			throw new DisconnectedException();
+		}
+		
+		$inputParameters['userId'] = $id;
 	}
 	
 	/**
@@ -70,7 +82,7 @@ class Secure implements RunnerHandler {
 	 *
 	 * can return value tranformed $result, encoder is call after this method
 	 */
-	public function after($method,array $inputParameters, $result, ServiceMetadata $metaData) {
+	public function after($method,array &$inputParameters, $result, ServiceMetadata $metaData) {
 		
 	}
 	
