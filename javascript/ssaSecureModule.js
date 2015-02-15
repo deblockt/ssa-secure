@@ -8,9 +8,10 @@ function module(service) {
 
 
 	var currentAuthToken = undefined;
-
+	var isHTML5 = typeof localStorage != 'undefined';
+	
 	// load token
-	if (typeof localStorage != 'undefined' && localStorage.currentAuthToken) {
+	if (isHTML5 && localStorage.currentAuthToken) {
 		currentAuthToken = localStorage.currentAuthToken;
 	} else { // load for cookies
 		currentAuthToken = getCookie('currentAuthToken');
@@ -20,15 +21,38 @@ function module(service) {
 		return currentAuthToken;
 	}
 
-	function setToken(token) {
+	function setToken(token, userInfos) {
 		currentAuthToken = token;
 		// add token on memory 
-		if (typeof localStorage != 'undefined') {
+		if (isHTML5) {
 			localStorage.currentAuthToken = token;
+			if (userInfos) {
+				localStorage.userInfos = JSON.stringify(userInfos);
+			} else {
+				localStorage.removeItem('userInfos');
+			}
 		} else {
-			setCookie('currentAuthToken', token, 365);
+			setCookie('currentAuthToken', token,token ? 365 : -1);
+			if (userInfos) {
+				setCookie('userInfos', JSON.stringify(userInfos), 365);
+			} else {
+				setCookie('userInfos', undefined, -1);
+			}			
 		}
 	}	
+	
+	
+	function getUserInfos() {
+		var infos = undefined;
+		
+		if (isHTML5) {
+			infos = localStorage.userInfos;
+		} else {
+			infos = getCookie('userInfos');
+		}
+		
+		return infos ? JSON.parse(infos) : undefined;
+	}
 
 	// if mode is restfull, add token on requet
 	ssa.addStartCallListener(function(data){
@@ -45,8 +69,8 @@ function module(service) {
 			} else if (result.class == "ssa\\secure\\services\\UserNotExistsException") {
 				callListener(badUserOrPasswordListener, this);
 			} else if (result.logged && result.logged === true) {
-				setToken(result[tokenName]);
-				callListener(connectedListener, this, [result[tokenName]]);
+				setToken(result[tokenName], result['userInfos']);
+				callListener(connectedListener, this, [result[tokenName], result['userInfos']]);
 			} 
 		}
 		return true;
@@ -89,15 +113,18 @@ function module(service) {
 	 * set the current user token
 	 * can be used for multiple page application
 	 * by default the token is save on cookie or html 5 local storage
-	 * is parameter of setToken is undefined, the user will be disconnected
+	 * is parameter of setToken is undefined, the user will be disconnected (restfull mode)
 	 */
-	service.setToken = setToken,
+	service.setToken = setToken;
 	/**
 	 * return the current user token
 	 */
-	service.getToken = getToken
+	service.getToken = getToken;
 
-
+	/**
+	 * return the user infos return by authenticate methods
+	 */
+	service.getUserInfos = getUserInfos;
 
 	/************************************************
 	*********** ADD COOKIE SUPPORT ******************

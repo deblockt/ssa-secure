@@ -19,65 +19,54 @@ and open the template in the editor.
 		
 			ssa.addStartCallListener(function() {
 				this.haveHandler = 'yes';
-				console.log('start', this);
+				console && console.log('start', this);
 			});
 			
 			ssa.addEndCallListener(function() {
-				console.log('end', this);
+				console && console.log('end', this);
 			});
-			
-            helloWorldService.helloYou('deblockt').done(function(data) {
-                document.getElementById('helloYou').innerHTML = data;
-            });
+		
                       
             $().ready(function(){
-                $('input[name="your_name"]').blur(function(){
-                    helloWorldService.helloYou($(this).val()).done(function(data){
-                         document.getElementById('helloYou2').innerHTML = data;
+                $('button.run').click(function(){
+                    helloWorldService.helloYou().done(function(data){
+                         $('span.result').html(data);
                     });
                 });
+				
+				$('form.logon').submit(function(){
+					authenticateService.login(this.login.value, this.password.value);
+					return false;
+				});
+				
             });
 
 			authenticateService.addDisconnectListener(function(){
-				console.log(this);
-				alert('Vous avez été deconnecté');
+				$('span.result').html('You are not logged');
 			});
 			
-			authenticateService.addConnectedListener(function(){
-				alert('Vous avez été correctement connecté');
+			authenticateService.addConnectedListener(function(token, userInfos){
+				$('span.result').html('You are logged, you can call service.' + userInfos['name']);
 			});
 			
 			authenticateService.addBadUserOrPasswordListener(function(){
-				alert('Erreur de login our mot de passe');
+				$('span.result').html('Bad loggin or password');
 			});
 			
         </script>
     </head>
     <body>
-        <div>Hello world return : <span id="helloYou"></span> </div>
-        <pre>
-            <code class="javascript">            
-                HelloWorld.helloYou('deblockt').done(function(data) {
-                    document.getElementById('helloYou').innerHTML = data;
-                });
-            </code>
-        </pre>
-        <div> Hello You <input name="your_name" placeholder="Your name"/> : <span id="helloYou2"></span></div>
-        <pre>
-            <code class="javascript">            
-                $('input[name="your_name"]').blur(function(){
-                    HelloWorld.helloYou($(this).val()).done(function(data){
-                         document.getElementById('helloYou2').innerHTML = data;
-                    });
-                });
-            </code>
-        </pre>
+        <button class="run"> service call </button>
         
-        <form action="http://localhost:8080/ssa/test/ssa/toEndTest/run.php" method="POST" enctype="multipart/form-data">
-            <input type="text" name="service" value="HelloWorld.getFileContent"/>
-            
-            <input type="file" multiple="multiple" id="fileUpload1" name="file[]"/>
-            <input type="file" multiple="multiple" id="fileUpload2" name="file[]"/>
+		<span class="result"></span>
+		
+        <form action="http://localhost:8080/ssa/test/ssa/toEndTest/run.php" method="POST" class="logon">
+            <input type="text" name="login" placeholder="Loggin"/>
+			<input type="password" name="password" placeholder="Password"/>
+			
+			<input type="submit"/>
         </form>
+		
+		password is admin, login is what you want.
     </body>
 </html>

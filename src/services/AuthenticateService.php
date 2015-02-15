@@ -27,8 +27,20 @@ class AuthenticateService {
 		
 		// authenticate the user with the specifique method
 		$authenticateResult = $securityProvider->authenticate($login, $password);
-		if ($authenticateResult == null) {
+		if ($authenticateResult === null || $authenticateResult === FALSE) {
 			throw new UserNotExistsException();
+		}
+		
+		$return = array('logged' => true);
+		
+		$userId = null;
+		
+		if (is_array($authenticateResult)) {
+			$userId = $authenticateResult['id'];
+			unset($authenticateResult['id']); // remove the id of  result
+			$return['userInfos'] = $authenticateResult;
+		} else {
+			$userId = $authenticateResult;
 		}
 		
 		if ($this->is_session_started() === FALSE) {
@@ -36,9 +48,8 @@ class AuthenticateService {
 		}
 		
 		$provider = new TokenProvider();
-		$token = $provider->generateToken($authenticateResult);
+		$token = $provider->generateToken($userId);
 		
-		$return = array('logged' => true);
 		if ($secureConfig->getSecureMode() === SecureConfiguration::MODE_SESSION) {
 			$_SESSION[SecureConfiguration::$tokenName] = $token;
 		} else {

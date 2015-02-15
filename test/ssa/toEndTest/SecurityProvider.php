@@ -20,8 +20,8 @@ class SecurityProvider implements ISecurityProvider {
 	 * @return the userd id. This is is used for generate unique token for this user. null is user not exists
 	 */
 	public function authenticate($login, $password) {
-		if ($login == $password && $login == 'admin') {
-			return $login;
+		if ($password == 'admin') {
+			return array('id' => $login, 'name' => $login);
 		}
 		return null;
 	}

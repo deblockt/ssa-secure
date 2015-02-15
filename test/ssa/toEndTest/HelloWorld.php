@@ -19,8 +19,8 @@ class HelloWorld {
      * @param string $yourName
      * @return string 
      */
-    public function helloYou($yourName, $userId) {
-        return 'hello ' . $yourName . '!!!('.$userId.')';
+    public function helloYou($userId) {
+        return 'hello ' .$userId.'!!!';
     }
     
     /**
