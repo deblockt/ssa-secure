@@ -28,21 +28,6 @@ class SecureConfiguration  {
 	private $securityProvider;
 	
 	/**
-	 * the security mode. Session or RestFull
-	 */
-	private $secureMode;
-
-	/**
-	 * session secure mode 
-	 */
-	const MODE_SESSION = 1;
-	
-	/**
-	 * session restfull
-	 */
-	const MODE_RESTFULL = 2;
-	
-	/**
 	 * token used for parameter user token. Warning on update this var, update to on ssaSecure.js
 	 */
 	public static $tokenName = 'securityToken';
@@ -56,7 +41,6 @@ class SecureConfiguration  {
         if (self::$instance == null) {
 			// create configuration singleton
             self::$instance = new SecureConfiguration();
-			self::$instance->secureMode = SecureConfiguration::MODE_RESTFULL;
         }
         return self::$instance;
     }
@@ -90,19 +74,5 @@ class SecureConfiguration  {
 	 */
 	public function getSecurityProvider() {
 		return$this->securityProvider;
-	}
-
-	/**
-	 * set the secure mode (session or restfull)
-	 */
-	public function setSecureMode($mode) {
-		$this->secureMode = $mode;
-	}
-	
-	/**
-	 * return the secure mode
-	 */
-	public function getSecureMode() {
-		return $this->secureMode;
 	}
 }

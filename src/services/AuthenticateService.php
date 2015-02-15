@@ -43,18 +43,11 @@ class AuthenticateService {
 			$userId = $authenticateResult;
 		}
 		
-		if ($this->is_session_started() === FALSE) {
-			session_start();
-		}
-		
 		$provider = new TokenProvider();
 		$token = $provider->generateToken($userId);
 		
-		if ($secureConfig->getSecureMode() === SecureConfiguration::MODE_SESSION) {
-			$_SESSION[SecureConfiguration::$tokenName] = $token;
-		} else {
-			$return[SecureConfiguration::$tokenName] = $token;
-		}
+		$return[SecureConfiguration::$tokenName] = $token;
+		
 		
 		return $return;
 	}

@@ -43,25 +43,12 @@ class Secure implements RunnerHandler {
 	public function before($method,array &$inputParameters,ServiceMetadata $metaData) {
 		$secureInstance = SecureConfiguration::getInstance();
 		$securityToken = null;
-		if ($secureInstance->getSecureMode() === SecureConfiguration::MODE_SESSION) {
-			// start the session
-			if ($this->is_session_started() === FALSE) {
-				session_start();
-			}
-			
-			// if session token not exists user not logon
-			if (!isset($_SESSION[SecureConfiguration::$tokenName])) {
-				throw new DisconnectedException();
-			}
-			
-			$securityToken = $_SESSION[SecureConfiguration::$tokenName];
-		} else {
-			if (!isset($inputParameters[SecureConfiguration::$tokenName])) {
-				throw new DisconnectedException();
-			}
-			
-			$securityToken = $inputParameters[SecureConfiguration::$tokenName];
+		
+		if (!isset($inputParameters[SecureConfiguration::$tokenName])) {
+			throw new DisconnectedException();
 		}
+		
+		$securityToken = $inputParameters[SecureConfiguration::$tokenName];
 		
 		$provider = new TokenProvider();
 		$id = $provider->checkToken($securityToken);

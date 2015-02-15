@@ -3,6 +3,7 @@
  * is added on service definition
  */
 
+ // service parameter is the authenticationService
 function module(service) {
 	const tokenName = 'securityToken';
 
@@ -116,11 +117,18 @@ function module(service) {
 	 * is parameter of setToken is undefined, the user will be disconnected (restfull mode)
 	 */
 	service.setToken = setToken;
+	
+	/**
+	 * logout the current user
+	 */
+	service.logout = setToken;
+	
 	/**
 	 * return the current user token
 	 */
 	service.getToken = getToken;
 
+	
 	/**
 	 * return the user infos return by authenticate methods
 	 */
