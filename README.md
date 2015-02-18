@@ -4,6 +4,16 @@ Ssa secure is an extention of SSA[https://github.com/deblockt/ssa].
 
 This provide a service for manager login.
 
+## Installation
+
+you need to add : 
+
+``` json
+	"ssa/secure": "dev-master"
+```
+
+on your composer dependencies.
+
 ## Configuration
 
 For use this module you need add service on your serviceManager.
@@ -26,6 +36,7 @@ After you must configure the module :
 ``` php
 use ssa\secure\SecureConfiguration;
 
+// SecurityProvider is your own class who implement ISecurityProvider
 SecureConfiguration::getInstance()->setSecurityProvider(new SecurityProvider());
 SecureConfiguration::getInstance()->setTokenCryptKey('yourCryptKey');
 ```
