@@ -26,7 +26,12 @@ function module(service) {
 		currentAuthToken = token;
 		// add token on memory 
 		if (isHTML5) {
-			localStorage.currentAuthToken = token;
+			if (token) {
+				localStorage.currentAuthToken = token;
+			} else {
+				localStorage.removeItem('currentAuthToken');
+			}
+			
 			if (userInfos) {
 				localStorage.userInfos = JSON.stringify(userInfos);
 			} else {
