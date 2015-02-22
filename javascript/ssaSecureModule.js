@@ -12,7 +12,7 @@ function module(service) {
 	var isHTML5 = typeof localStorage != 'undefined';
 	
 	// load token
-	if (isHTML5 && localStorage.currentAuthToken) {
+	if (isHTML5) {
 		currentAuthToken = localStorage.currentAuthToken;
 	} else { // load for cookies
 		currentAuthToken = getCookie('currentAuthToken');
