@@ -5,7 +5,7 @@
 
  // service parameter is the authenticationService
 function module(service) {
-	const tokenName = 'securityToken';
+	var tokenName = 'securityToken';
 
 
 	var currentAuthToken = undefined;
